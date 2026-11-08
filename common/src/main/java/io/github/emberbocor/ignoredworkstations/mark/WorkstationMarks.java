@@ -61,6 +61,8 @@ public final class WorkstationMarks {
         }
         if (marked && stack.getItem() instanceof AxeItem && !player.isSecondaryUseActive()) {
             marks.remove(pos.asLong());
+            // A marked block has no valid claim; a villager that claimed it while the mod was removed leaves its ticket behind.
+            releaseTicket(level, pos);
             stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             level.playSound(null, pos, SoundEvents.AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
             level.levelEvent(null, LevelEvent.PARTICLES_WAX_OFF, pos, 0);
@@ -93,6 +95,10 @@ public final class WorkstationMarks {
                 forget(villager, MemoryModuleType.POTENTIAL_JOB_SITE, site);
             }
         }
+        releaseTicket(level, pos);
+    }
+
+    private static void releaseTicket(ServerLevel level, BlockPos pos) {
         PoiManager poiManager = level.getPoiManager();
         if (poiManager.getType(pos).isPresent()) {
             poiManager.release(pos);
