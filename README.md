@@ -53,7 +53,7 @@ In singleplayer, install it in your own game; the built-in server runs it.
 
 ## Removing the mod
 
-The world opens normally and every workstation is an ordinary job site again, because the mod does not change the blocks or remove the game's own job site records. The mod's data stays in the world folder (`data/ignoredworkstations.dat` of each dimension); vanilla ignores it, and it does no harm. If you install the mod again, marks on blocks that have not changed work again.
+The world opens normally and every workstation is an ordinary job site again, because the mod does not change the blocks or remove the game's own job site records. The mod's data stays in the world folder (`data/ignoredworkstations.dat` of each dimension); vanilla ignores it, and it does no harm. If you install the mod again, marks on blocks that have not changed work again. Marks are stored by position and the mod cannot see changes made while it is removed, so if a workstation was broken and the same type of block was placed at that spot in the meantime, the new block counts as marked. Use an axe to remove the mark.
 
 ## Compatibility
 
