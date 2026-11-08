@@ -17,7 +17,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
@@ -52,7 +51,9 @@ public final class WorkstationMarks {
         boolean marked = marks.contains(pos.asLong());
         if (!marked && stack.is(Items.HONEYCOMB)) {
             marks.add(pos.asLong());
-            stack.consume(1, player);
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1);
+            }
             releaseClaims(level, pos);
             // A null player sends the event to the clicking player too; a vanilla client does not predict this click.
             level.levelEvent(null, LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
@@ -63,7 +64,7 @@ public final class WorkstationMarks {
             marks.remove(pos.asLong());
             // A marked block has no valid claim; a villager that claimed it while the mod was removed leaves its ticket behind.
             releaseTicket(level, pos);
-            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+            stack.hurtAndBreak(1, player, broken -> broken.broadcastBreakEvent(hand));
             level.playSound(null, pos, SoundEvents.AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
             level.levelEvent(null, LevelEvent.PARTICLES_WAX_OFF, pos, 0);
             player.displayClientMessage(Component.literal("Villagers can use this block again"), true);

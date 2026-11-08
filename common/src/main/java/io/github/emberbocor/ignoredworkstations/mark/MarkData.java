@@ -3,17 +3,11 @@ package io.github.emberbocor.ignoredworkstations.mark;
 import io.github.emberbocor.ignoredworkstations.IgnoredWorkstations;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 
 final class MarkData extends SavedData {
-    // Vanilla needs a data fix type; this one has no fixes for data saved by the running version.
-    private static final SavedData.Factory<MarkData> FACTORY =
-            new SavedData.Factory<>(MarkData::new, MarkData::load, DataFixTypes.SAVED_DATA_RANDOM_SEQUENCES);
-
     private final LongSet positions;
 
     private MarkData() {
@@ -25,7 +19,7 @@ final class MarkData extends SavedData {
     }
 
     static MarkData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(FACTORY, IgnoredWorkstations.MODID);
+        return level.getDataStorage().computeIfAbsent(MarkData::load, MarkData::new, IgnoredWorkstations.MODID);
     }
 
     boolean isEmpty() {
@@ -49,12 +43,12 @@ final class MarkData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag save(CompoundTag tag) {
         tag.putLongArray("positions", positions.toLongArray());
         return tag;
     }
 
-    private static MarkData load(CompoundTag tag, HolderLookup.Provider registries) {
+    private static MarkData load(CompoundTag tag) {
         return new MarkData(new LongOpenHashSet(tag.getLongArray("positions")));
     }
 }

@@ -22,6 +22,5 @@ plugins {
 
 rootProject.name = 'ignoredworkstations'
 include('common')
-include('neoforge')
 include('fabric')
 include('forge')
