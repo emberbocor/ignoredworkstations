@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
@@ -89,7 +89,7 @@ public final class WorkstationMarks {
     private static void releaseClaims(ServerLevel level, BlockPos pos) {
         GlobalPos site = GlobalPos.of(level.dimension(), pos);
         for (ServerLevel other : level.getServer().getAllLevels()) {
-            for (Villager villager : other.getEntities(EntityType.VILLAGER, villager -> true)) {
+            for (Villager villager : other.getEntities(EntityTypes.VILLAGER, villager -> true)) {
                 forget(villager, MemoryModuleType.JOB_SITE, site);
                 forget(villager, MemoryModuleType.POTENTIAL_JOB_SITE, site);
             }

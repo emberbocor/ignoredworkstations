@@ -33,11 +33,11 @@ Available for NeoForge, Forge and Fabric.
 
 | | NeoForge | Forge | Fabric |
 |---|---|---|---|
-| Minecraft | 26.1 to 26.1.2 | 26.1 to 26.1.2 | 26.1 to 26.1.2 |
-| Loader | NeoForge 26.1.0.1-beta or newer | Forge 62.0.0 or newer | Fabric Loader 0.18.2 or newer |
-| Jar | `ignoredworkstations-neoforge-26.1-26.1.2-<version>.jar` | `ignoredworkstations-forge-26.1-26.1.2-<version>.jar` | `ignoredworkstations-fabric-26.1-26.1.2-<version>.jar` |
+| Minecraft | 26.2 | 26.2 | 26.2 |
+| Loader | NeoForge 26.2.0.0-beta or newer | Forge 65.0.0 or newer | Fabric Loader 0.18.2 or newer |
+| Jar | `ignoredworkstations-neoforge-26.2-<version>.jar` | `ignoredworkstations-forge-26.2-<version>.jar` | `ignoredworkstations-fabric-26.2-<version>.jar` |
 
-On Minecraft 26.1 to 26.1.2, NeoForge and Forge are separate loaders that do not run each other's mods, so each has its own jar. Pick the jar that matches your server's loader. Fabric API is not needed.
+On Minecraft 26.2, NeoForge and Forge are separate loaders that do not run each other's mods, so each has its own jar. Pick the jar that matches your server's loader. Fabric API is not needed.
 
 ### Client and server
 
