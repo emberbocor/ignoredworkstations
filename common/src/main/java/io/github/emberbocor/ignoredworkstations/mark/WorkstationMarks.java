@@ -55,7 +55,7 @@ public final class WorkstationMarks {
             releaseClaims(level, pos);
             // A null player sends the event to the clicking player too; a vanilla client does not predict this click.
             level.levelEvent(null, LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
-            player.displayClientMessage(Component.literal("Villagers will ignore this block"), true);
+            player.sendOverlayMessage(Component.literal("Villagers will ignore this block"));
             return true;
         }
         if (marked && stack.getItem() instanceof AxeItem && !player.isSecondaryUseActive()) {
@@ -65,7 +65,7 @@ public final class WorkstationMarks {
             stack.hurtAndBreak(1, player, hand);
             level.playSound(null, pos, SoundEvents.AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
             level.levelEvent(null, LevelEvent.PARTICLES_WAX_OFF, pos, 0);
-            player.displayClientMessage(Component.literal("Villagers can use this block again"), true);
+            player.sendOverlayMessage(Component.literal("Villagers can use this block again"));
             return true;
         }
         return false;
