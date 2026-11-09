@@ -25,6 +25,12 @@ abstract class PoiManagerMixin {
                 : positions;
     }
 
+    // Lithium replaces the search of AcquirePoi with this method of its own; it is absent without Lithium.
+    @ModifyVariable(method = "lithium$getNClosestFirstWithType", at = @At("HEAD"), argsOnly = true, ordinal = 1, remap = false, require = 0)
+    private Predicate<BlockPos> ignoredworkstations$lithiumWithoutMarked(Predicate<BlockPos> positions) {
+        return ignoredworkstations$withoutMarked(positions);
+    }
+
     // ValidateNearbyPoi: a villager loaded from disk may still remember a site that was marked while it was unloaded.
     @Inject(method = "exists", at = @At("HEAD"), cancellable = true)
     private void ignoredworkstations$markedDoesNotExist(BlockPos pos, Predicate<Holder<PoiType>> typePredicate, CallbackInfoReturnable<Boolean> cir) {
