@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.BlockTransformer;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -22,9 +24,9 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.npc.villager.Villager;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.BlockTransformers;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -54,16 +56,17 @@ public final class WorkstationMarks {
             stack.consume(1, player);
             releaseClaims(level, pos);
             // A null player sends the event to the clicking player too; a vanilla client does not predict this click.
-            level.levelEvent(null, LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
+            level.levelEvent(null, LevelEvent.PARTICLES_WAX_ON, pos, 0);
+            level.playSound(null, pos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1.0F, 1.0F);
             player.sendOverlayMessage(Component.literal("Villagers will ignore this block"));
             return true;
         }
-        if (marked && stack.getItem() instanceof AxeItem && !player.isSecondaryUseActive()) {
+        if (marked && isAxe(stack) && !player.isSecondaryUseActive()) {
             marks.remove(pos.asLong());
             // A marked block has no valid claim; a villager that claimed it while the mod was removed leaves its ticket behind.
             releaseTicket(level, pos);
             stack.hurtAndBreak(1, player, hand);
-            level.playSound(null, pos, SoundEvents.AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, pos, SoundEvents.AXE_WAX_OFF.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
             level.levelEvent(null, LevelEvent.PARTICLES_WAX_OFF, pos, 0);
             player.sendOverlayMessage(Component.literal("Villagers can use this block again"));
             return true;
@@ -84,6 +87,12 @@ public final class WorkstationMarks {
     public static Predicate<BlockPos> withoutMarked(ServerLevel level, Predicate<BlockPos> positions) {
         MarkData marks = MarkData.get(level);
         return marks.isEmpty() ? positions : pos -> !marks.contains(pos.asLong()) && positions.test(pos);
+    }
+
+    // Item.Properties#axe sets this component; it replaced AxeItem in 26.3.
+    private static boolean isAxe(ItemStack stack) {
+        Holder<BlockTransformer> transformer = stack.get(DataComponents.BLOCK_TRANSFORMER);
+        return transformer != null && transformer.is(BlockTransformers.AXE);
     }
 
     private static void releaseClaims(ServerLevel level, BlockPos pos) {
