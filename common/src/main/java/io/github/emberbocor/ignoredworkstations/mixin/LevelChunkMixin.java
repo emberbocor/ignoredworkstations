@@ -20,9 +20,9 @@ abstract class LevelChunkMixin {
     @Final
     Level level;
 
-    // Every block change on a loaded chunk ends here, also for blocks whose onRemove does not call super.
+    // Every block change on a loaded chunk ends here, whatever its update flags; the return value is the replaced state.
     @Inject(method = "setBlockState", at = @At("RETURN"))
-    private void ignoredworkstations$blockChanged(BlockPos pos, BlockState state, boolean isMoving, CallbackInfoReturnable<BlockState> cir) {
+    private void ignoredworkstations$blockChanged(BlockPos pos, BlockState state, int flags, CallbackInfoReturnable<BlockState> cir) {
         if (level instanceof ServerLevel serverLevel) {
             WorkstationMarks.blockChanged(serverLevel, pos, cir.getReturnValue(), state);
         }

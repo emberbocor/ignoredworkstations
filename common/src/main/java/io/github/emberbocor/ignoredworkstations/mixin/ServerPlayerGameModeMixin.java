@@ -41,7 +41,8 @@ abstract class ServerPlayerGameModeMixin {
         } else if (WorkstationMarks.use(serverLevel, player, stack, hand, pos)) {
             ignoredworkstations$usedPos = pos;
             ignoredworkstations$usedTick = tick;
-            cir.setReturnValue(InteractionResult.SUCCESS);
+            // A vanilla client does not predict this click, so the server has to swing the arm.
+            cir.setReturnValue(InteractionResult.SUCCESS_SERVER);
         }
     }
 }
